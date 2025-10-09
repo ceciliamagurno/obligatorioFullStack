@@ -6,11 +6,6 @@ const {
   pingController,
 } = require("../controllers/public.controller");
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Servidor funcionando, ruta pública' });
-});
-
-
 publicRouter.get("/health", healthController);
 publicRouter.get("/ping", pingController);
 publicRouter.get('/catalogs', (req, res) => {
