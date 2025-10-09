@@ -6,6 +6,10 @@ const getBooksController = async (req, res) => {
     const { id } = req.user;
     try {
         const books = await getBooks(id);
+          if (books.length === 0) {
+            res.status(200).json({ message: "No hay libros registrados para este usuario" });
+        }
+
         res.status(200).json(books);
     } catch (err) {
         res.status(500).json({ message: 'Error al obtener los libros' });

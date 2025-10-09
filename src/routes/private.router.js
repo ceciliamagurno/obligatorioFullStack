@@ -11,8 +11,6 @@ router.get('/books', getBooksController);
 router.get('/books/:id', getBookByIdController);
 // validar payload, comprobar límite por plan, luego crear libro
 router.post('/books', payloadMiddleWare(bookSchema), planLimitMiddleware, postBookController);
-// Validar payload tanto en creación como en actualización para asegurar
-// que 'genero' y 'pais' estén entre los valores precargados
 router.put('/books/:id', payloadMiddleWare(bookSchema), putBookController);
 router.delete('/books/:id', deleteBookController);
 
