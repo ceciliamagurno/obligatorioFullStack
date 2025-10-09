@@ -34,9 +34,7 @@ app.use(sanitizeQuery);
 // Rutas
 app.use("/public", publicRouter);
 app.use("/v1/auth", authRouter);
-app.use(authMiddleware); 
-
-app.use("/v1", privateRouter);
+app.use("/v1", authMiddleware, privateRouter);
  
 //Para que Vercel la use como handler
 module.exports = app;
