@@ -6,6 +6,11 @@ const {
   pingController,
 } = require("../controllers/public.controller");
 
+
+publicRouter.get('/', (req, res) => {
+  res.send('Bienvenido a la API!');
+});
+
 publicRouter.get("/health", healthController);
 publicRouter.get("/ping", pingController);
 publicRouter.get('/catalogs', (req, res) => {
