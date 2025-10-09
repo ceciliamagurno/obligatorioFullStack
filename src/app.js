@@ -32,7 +32,7 @@ app.use(loggerMiddleware);
 app.use(sanitizeQuery);
 
 // Rutas
-app.use("/public", publicRouter);
+app.use("/", publicRouter);
 app.use("/v1/auth", authRouter);
 app.use("/v1", authMiddleware, privateRouter);
  
