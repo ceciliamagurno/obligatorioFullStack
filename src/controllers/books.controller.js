@@ -46,7 +46,6 @@ const postBookController = async (req, res) => {
         if (existingBook) {
             return res.status(400).json({ message: 'El libro ya está registrado.' });
         }
-        await sendEmail(newBook.titulo);
         const newBook = await createBook(body, user.id);
         res.status(201).json({
             message: 'Libro registrado exitosamente',
