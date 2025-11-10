@@ -76,17 +76,23 @@ const putBookController = async (req, res) => {
 };
 
 const deleteBookController = async (req, res) => {
-    const bookId = req.params.id;
+    // Soporta recibir el id desde params, body o query para mayor compatibilidad
+    const bookId = req.params.id || req.body._id || req.query.id;
     const { id } = req.user;
+
+    if (!bookId) {
+        return res.status(400).json({ message: 'Falta el identificador del libro (id/_id).' });
+    }
+
     try {
         const deleted = await deleteBook(bookId, id);
-       if (deleted.deletedCount > 0) {
-            res.status(200).json({ message: "Libro eliminado correctamente" });
+        if (deleted && deleted.deletedCount > 0) {
+            return res.status(200).json({ message: "Libro eliminado correctamente" });
         } else {
-            res.status(404).json({ message: 'Libro no encontrado' });
+            return res.status(404).json({ message: 'Libro no encontrado' });
         }
     } catch (err) {
-        res.status(500).json({ message: 'Ha ocurrido un error en el servidor' });
+        return res.status(500).json({ message: 'Ha ocurrido un error en el servidor' });
     }
 };
 

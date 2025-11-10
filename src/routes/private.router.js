@@ -13,6 +13,8 @@ router.get('/books/:id', getBookByIdController);
 router.post('/books', payloadMiddleWare(bookSchema), planLimitMiddleware, postBookController);
 router.put('/books/:id', payloadMiddleWare(bookSchema), putBookController);
 router.delete('/books/:id', deleteBookController);
+// Ruta alternativa para aceptar el id en el body (por ejemplo si el cliente envía {_id: '...'} en el body)
+router.delete('/books', deleteBookController);
 
 
 router.post('/profile/plan', payloadMiddleWare(profileSchema), changePlanController);

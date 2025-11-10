@@ -3,7 +3,7 @@ const Book = require('../books.model');
 const getBooks = async (userId) => { 
     const books = await Book.find({ 
         userId: userId 
-    }).select('id titulo autor fechaLectura genero pais paginas diasLeidos -_id'); 
+    }).select('id titulo autor fechaLectura genero pais paginas diasLeidos _id'); 
     return books ;
 };
 
@@ -11,7 +11,7 @@ const findBook = async (bookId, userId) => {
     return await Book.findOne({
         _id: bookId,
         userId: userId
-    }).select('titulo autor -_id');
+    }).select('titulo autor _id');
 }
 
 const createBook = async (body, userId) => {
@@ -27,7 +27,7 @@ const createBook = async (body, userId) => {
     });
     await newBook.save();
      return await Book.findById(newBook._id)
-        .select('titulo autor genero pais -_id');
+        .select('titulo autor genero pais _id');
 }
 
 const deleteBook = async (bookId, userId) => {
