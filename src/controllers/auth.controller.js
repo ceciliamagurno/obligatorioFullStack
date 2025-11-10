@@ -2,29 +2,37 @@ const jwt = require('jsonwebtoken');
 const { findUserByUserName, saveUser, isValidPassword } = require('../models/repositories/user.repository');
 
 const postAuthLogin = async (req, res) => {
-    const body = req.body;
-    const { username, password } = body;
-    const user = await findUserByUserName(username);
-    if (!user) {
-        res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
-        return;
+    try {
+        const body = req.body;
+        const { username, password } = body;
+        const user = await findUserByUserName(username);
+        if (!user) {
+            return res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
+        }
+
+        const isValidPass = await isValidPassword(password, user.password);
+
+        if (!isValidPass) {
+            return res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
+        }
+
+        const secret = process.env.AUTH_SECRET_KEY;
+        if (!secret) {
+            console.error('AUTH_SECRET_KEY no está definido en las variables de entorno');
+            return res.status(500).json({ message: 'Error de configuración del servidor' });
+        }
+
+        const token = jwt.sign(
+            { id: user.id || user._id, username: user.username },
+            secret,
+            { expiresIn: '1h' }
+        );
+
+        return res.status(200).json({ message: 'Login exitoso', token });
+    } catch (err) {
+        console.error('Error en postAuthLogin:', err);
+        return res.status(500).json({ message: 'Ha ocurrido un error en el servidor' });
     }
-
-    const isValidPass = await isValidPassword(password, user.password);
-
-    if (!isValidPass) {
-        res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
-        return;
-    }
-    
-    const token = jwt.sign(
-        { id: user.id, username: user.username },
-        process.env.AUTH_SECRET_KEY,
-        { expiresIn: '1h' }
-    );
-
-
-    res.status(200).json({ message: 'Login exitoso', token });
 }
 
 const postAuthSingup = async (req, res) => {

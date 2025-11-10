@@ -1,5 +1,4 @@
 const Book = require('../models/books.model');
-const sendEmail = require('../services/mailjet.service');
 const {getBooks, findBook, createBook, deleteBook, updateBook} = require('../models/repositories/books.repository');
 
 const getBooksController = async (req, res) => {
