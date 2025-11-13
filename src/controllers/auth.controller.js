@@ -22,13 +22,19 @@ const postAuthLogin = async (req, res) => {
             return res.status(500).json({ message: 'Error de configuración del servidor' });
         }
 
+        // Incluye el plan en el payload del JWT (ajusta 'user.plan' si el campo se llama diferente)
         const token = jwt.sign(
-            { id: user.id || user._id, username: user.username },
+            { id: user.id || user._id, username: user.username, plan: user.plan },  // Agregado 'plan'
             secret,
             { expiresIn: '1h' }
         );
 
-        return res.status(200).json({ message: 'Login exitoso', token });
+        // Devuelve el token y el plan en la respuesta
+        return res.status(200).json({ 
+            message: 'Login exitoso', 
+            token, 
+            plan: user.plan  // Agregado para que el frontend lo guarde fácilmente
+        });
     } catch (err) {
         console.error('Error en postAuthLogin:', err);
         return res.status(500).json({ message: 'Ha ocurrido un error en el servidor' });
